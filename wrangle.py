@@ -2,6 +2,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import QuantileTransformer
 
 from env import get_connection
 import os
@@ -44,3 +47,23 @@ def wrangle_zillow(df):
     df.to_csv('zillow_data.csv',index=False)
     
     return df
+
+
+def scale_data(train, val, test, to_scale):
+    #make copies for scaling
+    train_scaled = train.copy()
+    validate_scaled = val.copy()
+    test_scaled = test.copy()
+
+    #make the thing
+    scaler = MinMaxScaler()
+
+    #fit the thing
+    scaler.fit(train[to_scale])
+
+    #use the thing
+    train_scaled[to_scale] = scaler.transform(train[to_scale])
+    validate_scaled[to_scale] = scaler.transform(val[to_scale])
+    test_scaled[to_scale] = scaler.transform(test[to_scale])
+    
+    return train_scaled, validate_scaled, test_scaled
