@@ -51,3 +51,8 @@ def train_val_test(df, seed = 42):
                                  random_state = seed)
     
     return train, val, test
+
+
+def xy_split(df):
+    
+    return df.drop(columns=['price']), df.price
